@@ -3,6 +3,8 @@ package com.pandit.project.util;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.uuid.Generators;
 import com.fasterxml.uuid.impl.TimeBasedEpochGenerator;
 import com.pandit.project.dto.MessageRequest;
@@ -13,6 +15,7 @@ import com.pandit.project.repo.ConversationsRepo;
 
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
+@Component
 public class MessageTransformer {
 
 	private final ConversationsRepo conversationsRepo;

@@ -1,34 +1,68 @@
 package com.pandit.project.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 @Configuration
 public class SecurityConfig {
-	@Value(value = "${OPENAI_API_KEY}")
-	private String openAPiKey;
+	@Autowired
+	private JwtAuthFilter jwtAuthFilter;
+	
+	
+	@Bean
+	public  PasswordEncoder passwordEncoder() {
+	    return new BCryptPasswordEncoder();
+	}
 	
 	@Bean
 	protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		http.csrf(csrf -> csrf.disable())
+		http
 		.authorizeHttpRequests(
-				auth-> auth.anyRequest().permitAll()
-			
-				);
+				auth-> 
+					auth.requestMatchers("/api/auth/login").permitAll()
+					 .requestMatchers("/ws/**").permitAll()
+					.requestMatchers("/api/users/registration").permitAll()
+					   .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+					.anyRequest().authenticated()
+				
+				)  .addFilterBefore(jwtAuthFilter,
+		                org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+
+		.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+		
+				http.csrf(AbstractHttpConfigurer::disable);
 		return 		http.build();
+	}
+
+	@Bean
+	 public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration config=new CorsConfiguration();
+		config.setAllowedOrigins(List.of(                "http://127.0.0.1:5500",
+                "http://localhost:5500"));
+		// TODO Auto-generated method stub
+		config.setAllowedHeaders(List.of("Authorization","Content-Type"));
+		 config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		config.setAllowCredentials(true);
+		UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+		return source;
 	}
 
 	 @Bean
@@ -38,13 +72,4 @@ public class SecurityConfig {
 	    }
 	
 	
-	@Bean
-	public WebClient getWebClient() {
-		return WebClient.builder()
-	               .baseUrl("https://api.openai.com/v1/chat/completions")
-	               .defaultHeader(HttpHeaders.AUTHORIZATION,
-	                   "Bearer " + openAPiKey)
-	               .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-	               .build();
-	}
 }

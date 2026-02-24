@@ -1,6 +1,8 @@
 package com.pandit.project.controller;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +21,18 @@ public class UsersController {
 	
 	private final UserService userService;
 	
-	@PostMapping
-	public ResponseEntity<UserResponse> addUsers(@RequestBody UserRequestDtos userRequsetDtos){
-		userService.addUsers(userRequsetDtos);
-		return null;
+	@PostMapping("/registration")
+	public UserResponse addUsers(@RequestBody UserRequestDtos userRequsetDtos){
+		
+		return userService.addUsers(userRequsetDtos);
+
+	}
+	
+	@GetMapping("/pandits")
+	public List<UserResponse> getPandits(){
+		
+		return userService.getPandits();
+		
 	}
 
 }

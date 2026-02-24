@@ -5,12 +5,12 @@ import org.springframework.security.core.Authentication;
 public class TokenUtil {
 
 	public static Integer getUserId(Authentication authentication) {
-		return Integer.parseInt(getDetails(authentication));
+		return getDetails(authentication);
 	}
 
-	private static String getDetails(Authentication authentication) {
+	private static Integer getDetails(Authentication authentication) {
 		// TODO Auto-generated method stub
-		String userId=(String)authentication.getPrincipal();
+		Integer userId=(Integer)authentication.getPrincipal();
 		return userId;
 	}
 }

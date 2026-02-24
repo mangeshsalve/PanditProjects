@@ -3,7 +3,6 @@ package com.pandit.project.model;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -21,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Conversation {
 	@Id
 	private UUID id;	
-	private UUID userId;	
-	private UUID panditId;	
+	private Integer userId;	
+	private Integer panditId;	
 	private OffsetDateTime createdAt;	
 }
