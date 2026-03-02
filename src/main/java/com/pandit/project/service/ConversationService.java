@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
+import com.pandit.project.dto.ConversationRequest;
 import com.pandit.project.dto.PanditConversationResponseDto;
 import com.pandit.project.dto.UserConversationResponseDto;
 import com.pandit.project.model.Conversation;
@@ -24,15 +25,16 @@ public class ConversationService {
 	private final UserRepo userRepo;
 	private final MessageRepo messageRepo;
 
-	public Conversation createConversation(Integer userId, Integer panditId) {
+	public Conversation createConversation(Integer userId, ConversationRequest conversationRequest) {
 		// TODO Auto-generated method stub
-	Conversation conversation=	conversationsRepo.findByUserIdAndPanditId(userId,panditId).orElseGet(()->{
+	Conversation conversation=	conversationsRepo.findByUserIdAndPanditId(userId,conversationRequest.getPanditId()).orElseGet(()->{
 			return conversationsRepo.save(Conversation.builder()
 					.id(UUID.randomUUID())
-					.panditId(panditId)
+					.panditId(conversationRequest.getPanditId())
 					.userId(userId)
 					.createdAt(OffsetDateTime.now())
 					.build());
+			
 		});
 	
 	return conversation;

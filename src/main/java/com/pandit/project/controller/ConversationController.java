@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pandit.project.dto.ConversationRequest;
 import com.pandit.project.dto.PanditConversationResponseDto;
 import com.pandit.project.dto.UserConversationResponseDto;
 import com.pandit.project.model.Conversation;
@@ -26,10 +27,10 @@ public class ConversationController {
 	private final ConversationService service;
 	
 	@PostMapping
-	public Conversation createConversations(@RequestBody Integer panditId) {
+	public Conversation createConversations(@RequestBody ConversationRequest conversationRequest) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Integer userId=TokenUtil.getUserId(authentication);
-	return	service.createConversation(userId,panditId);
+	return	service.createConversation(userId,conversationRequest);
 		
 	}
 	

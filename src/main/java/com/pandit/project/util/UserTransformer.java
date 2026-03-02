@@ -11,6 +11,7 @@ import com.fasterxml.uuid.impl.TimeBasedEpochGenerator;
 import com.pandit.project.dto.UserAddressDto;
 import com.pandit.project.dto.UserRequestDtos;
 import com.pandit.project.dto.UserResponse;
+import com.pandit.project.model.Role;
 import com.pandit.project.model.UserAddress;
 import com.pandit.project.model.UserIdData;
 import com.pandit.project.model.Users;
@@ -29,9 +30,9 @@ public class UserTransformer {
 				.name(requestDtos.getName())
 				.email(requestDtos.getEmail())
 				.mobileNumber(requestDtos.getMobileNumber())
-				.role(requestDtos.getRole())
+				.role(Role.USER)
 				.username(requestDtos.getUsername())
-				.userAddress(buildUserAddressDto(requestDtos.getUserAddressDto()))
+				.userAddress(requestDtos.getUserAddressDto()!=null?buildUserAddressDto(requestDtos.getUserAddressDto()):null)
 				.password(encoder.encode( requestDtos.getPassword()))
 				.userId(data()+1)
 				.createdDateTime(OffsetDateTime.now())
@@ -61,7 +62,7 @@ public class UserTransformer {
 				.mobileNumber(save.getMobileNumber())
 				.role(save.getRole())
 				.createdDateTime(save.getCreatedDateTime())
-				.userAddressDto(buildUserAddress(save.getUserAddress()))
+				.userAddressDto(save.getUserAddress()!=null? buildUserAddress(save.getUserAddress()):null)
 				.build();
 	}
 
