@@ -34,7 +34,7 @@ public class UserTransformer {
 				.username(requestDtos.getUsername())
 				.userAddress(requestDtos.getUserAddressDto()!=null?buildUserAddressDto(requestDtos.getUserAddressDto()):null)
 				.password(encoder.encode( requestDtos.getPassword()))
-				.userId(data()+1)
+				.userId(data())
 				.createdDateTime(OffsetDateTime.now())
 				.build();
 	}
