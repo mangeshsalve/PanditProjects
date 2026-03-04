@@ -25,8 +25,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // Register the /ws endpoint for WebSocket connections
-        registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*")  // Configure CORS for your needs
+        registry.addEndpoint("/wss")
+                .setAllowedOriginPatterns("https://pandit-front-end.vercel.app")  // Configure CORS for your needs
                 .withSockJS();  // Enable SockJS fallback for browsers without WebSocket
     }
 }
