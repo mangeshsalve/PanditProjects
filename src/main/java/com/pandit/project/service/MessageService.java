@@ -59,7 +59,7 @@ public class MessageService {
 		if(conversation.getUserId().equals(dto.getSenderId())|| conversation.getPanditId().equals(dto.getSenderId())) {
 
 			messageRepo.save(transformer.toMessageEntity(			MessageRequest.builder()
-					.content(dto.getMessage())
+					.content(dto.getContent())
 					.conversationId(dto.getConversationId())
 					.build(),dto.getSenderId()));
 			return true;

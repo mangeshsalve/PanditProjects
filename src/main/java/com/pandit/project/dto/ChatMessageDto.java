@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 public class ChatMessageDto {
     private UUID conversationId;
     private Integer senderId;
-    private String message;
+    private String content;
     private OffsetDateTime createdAt;
 }
